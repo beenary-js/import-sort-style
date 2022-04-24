@@ -1,0 +1,20 @@
+{
+  "name": "import-sort-style-beenary",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "dependencies": {
+    "import-sort-parser": "^6.0.0",
+    "import-sort-style": "^6.0.0"
+  },
+  "scripts": {
+    "pretest": "tsc --noEmit",
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublish": "yarn build"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.3"
+  }
+}
