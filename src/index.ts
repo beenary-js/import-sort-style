@@ -1,4 +1,9 @@
-import { IStyleAPI, IStyleItem } from "import-sort-style";
+import { IImport } from "import-sort-parser"
+import { IStyleAPI, IStyleItem } from "import-sort-style"
+
+function isTypeImport(importItem: IImport): boolean {
+  return importItem.type === "import-type"
+}
 
 export function style(styleApi: IStyleAPI): IStyleItem[] {
   const {
@@ -17,9 +22,17 @@ export function style(styleApi: IStyleAPI): IStyleItem[] {
     name,
     naturally,
     unicode,
-  } = styleApi;
+  } = styleApi
 
   return [
+    // import type {foo, bar, …} from "baz";
+    {
+      match: isTypeImport,
+      sort: moduleName(naturally),
+      sortNamedMembers: name(unicode),
+    },
+    { separator: true },
+
     // import "foo"
     { match: and(hasNoMember, isAbsoluteModule) },
     { separator: true },
@@ -139,7 +152,7 @@ export function style(styleApi: IStyleAPI): IStyleItem[] {
     },
 
     { separator: true },
-  ];
+  ]
 }
 
-export default style;
+export default style
