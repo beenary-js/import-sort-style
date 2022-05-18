@@ -8,6 +8,7 @@ function isTypeImport(importItem: IImport): boolean {
 export function style(styleApi: IStyleAPI): IStyleItem[] {
   const {
     and,
+    or,
     hasDefaultMember,
     hasNamedMembers,
     hasNamespaceMember,
@@ -17,6 +18,7 @@ export function style(styleApi: IStyleAPI): IStyleItem[] {
     hasOnlyNamespaceMember,
     isAbsoluteModule,
     isInstalledModule,
+    isNodeModule,
     isRelativeModule,
     moduleName,
     name,
@@ -46,7 +48,7 @@ export function style(styleApi: IStyleAPI): IStyleItem[] {
       match: and(
         hasOnlyNamespaceMember,
         isAbsoluteModule,
-        isInstalledModule(".")
+        or(isNodeModule, isInstalledModule("."))
       ),
       sort: moduleName(naturally),
     },
@@ -56,7 +58,7 @@ export function style(styleApi: IStyleAPI): IStyleItem[] {
         hasDefaultMember,
         hasNamespaceMember,
         isAbsoluteModule,
-        isInstalledModule(".")
+        or(isNodeModule, isInstalledModule("."))
       ),
       sort: moduleName(naturally),
     },
@@ -66,7 +68,7 @@ export function style(styleApi: IStyleAPI): IStyleItem[] {
       match: and(
         hasOnlyDefaultMember,
         isAbsoluteModule,
-        isInstalledModule(".")
+        or(isNodeModule, isInstalledModule("."))
       ),
       sort: moduleName(naturally),
     },
@@ -76,14 +78,18 @@ export function style(styleApi: IStyleAPI): IStyleItem[] {
         hasDefaultMember,
         hasNamedMembers,
         isAbsoluteModule,
-        isInstalledModule(".")
+        or(isNodeModule, isInstalledModule("."))
       ),
       sort: moduleName(naturally),
       sortNamedMembers: name(unicode),
     },
     // import {foo, bar, …} from "baz";
     {
-      match: and(hasOnlyNamedMembers, isAbsoluteModule, isInstalledModule(".")),
+      match: and(
+        hasOnlyNamedMembers,
+        isAbsoluteModule,
+        or(isNodeModule, isInstalledModule("."))
+      ),
       sort: moduleName(naturally),
       sortNamedMembers: name(unicode),
     },
